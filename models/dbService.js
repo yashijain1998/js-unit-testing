@@ -8,7 +8,7 @@ const addTask = (description)=> {
   const data = fetchDB();
   const newTask = {
     "id": data[data.length - 1].id + 1,
-    description,
+    "description": description,
     "completed": false
   }
   data.push(newTask);
