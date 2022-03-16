@@ -3,11 +3,6 @@ const router = express.Router();
 
 const {getAllTodos, addTask, updateTask, deleteTask} = require('../controllers/TodoController');
 
-// router.get('/allTodos' , (req,res) => {
-//     console.log(getAllTodos);
-//     res.send(getAllTodos);
-// })
-
 // get all tasks
 router.get('/allTodos', getAllTodos);
 
