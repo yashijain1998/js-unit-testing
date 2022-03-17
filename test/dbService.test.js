@@ -1,7 +1,11 @@
 const chai = require('chai');
+// const chaiHttp = require('chai-http');
+
+// const server = require('../index');
 const dbService = require('../models/dbService');
 
 const expect = chai.expect;
+// chai.use(chaiHttp);
 
 describe('Testing Database fetch methods', ()=> {
 
@@ -24,11 +28,6 @@ describe('Testing Database fetch methods', ()=> {
       expect(data.description).to.equal(description);
       expect(data.completed).to.be.false;
     })
-
-    it('should return undefined description', ()=> {
-      const data = dbService.addTask();
-      expect(data.description).to.be.undefined;
-    })
   })
 
   describe('find task index method', ()=> {
@@ -39,9 +38,10 @@ describe('Testing Database fetch methods', ()=> {
     })
     it('should not return index', ()=> {
       const index = dbService.findTask(-1);
-      expect(index).that.is.a('number');
-      expect(index).to.equal(-1);
+      // expect(index).that.is.a('number');
+      expect(index).to.equal(null);
     })
   })
 
 })
+

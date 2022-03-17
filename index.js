@@ -17,3 +17,5 @@ app.use(todoRoutes);
 app.listen(port, () => {
   console.log(`Listening to http://localhost:${port}`);
 });
+
+module.exports = app;

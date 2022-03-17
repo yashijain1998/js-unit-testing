@@ -18,6 +18,7 @@ const addTask = (description)=> {
 const findTask = (findID)=> {
   const data = fetchDB();
   const index = data.findIndex(task => task.id == findID );
+  if(index == -1) return null;
   return index;
 }
 

@@ -4,15 +4,15 @@ const router = express.Router();
 const {getAllTodos, addTask, updateTask, deleteTask} = require('../controllers/TodoController');
 
 // get all tasks
-router.get('/allTodos', getAllTodos);
+router.get('/task', getAllTodos);
 
 //create a new task
-router.post('/addTask', addTask);
+router.post('/task', addTask);
 
 //update task
-router.put('/updateTask/:id', updateTask);
+router.put('/task/:id', updateTask);
 
 //delete task
-router.delete('/deleteTask/:id', deleteTask);
+router.delete('/task/:id', deleteTask);
 
 module.exports = router;
