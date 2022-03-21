@@ -1,32 +1,35 @@
+const mongoose = require('mongoose');
 const dbService = require('../models/dbService');
 const taskSchema = require("../utils/taskSchema");
 
-getAllTodos = (req, res) =>  {
-    const data = dbService.fetchDB();
+getAllTodos = async (req, res) =>  {
+    const data = await dbService.fetchDB();
     res.send(data);
 }
 
-addTask = (req,res) => {
+addTask = async (req,res) => {
     const result = taskSchema.validate(req.body);
     if(result.error) return res.status(400).send("Description is necessary for adding a new task.")
-    const newTask = dbService.addTask(req.body.description);
+    const newTask = await dbService.addTask(req.body.description);
     res.status(201).send(newTask);
 }
 
-updateTask = (req,res) => {
-    const data = dbService.fetchDB();
-    const index =  dbService.findTask(req.params.id);
-    if(index == null) return res.status(404).send("Given task is not present for updation");
-    data[index]['completed'] = true;
-    res.status(201).send(data[index]);
+updateTask = async (req,res) => {
+    if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        return res.status(400).send("ID format is invalid")
+    }
+    const task =  await dbService.updateStatus(req.params.id);
+    if(task === null) return res.status(404).send("Given task is not present for updation");
+    res.status(201).send(task);
 }
 
-deleteTask = (req,res) => {
-    const data = dbService.fetchDB();
-    const index =  dbService.findTask(req.params.id);
-    if(index == null) return res.status(404).send("Given task is not present for deletion.");
-    data.splice(index,1);
-    res.send(`id ${req.params.id} deleted successfully.`);
+deleteTask = async (req,res) => {
+    if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        return res.status(400).send("ID format is invalid")
+    }
+    const task = await dbService.deleteTaskById(req.params.id);
+    if(task == null) return res.status(404).send("Given task is not present for deletion.");
+    res.send(task);
 }
 
 module.exports = {getAllTodos, addTask, updateTask, deleteTask};
