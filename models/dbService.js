@@ -1,7 +1,7 @@
-let todoList = require("./todoList.json");
+const task = require("./task")
 
 const fetchDB = ()=> {
-  return todoList; 
+  return task.find(); 
 }
 
 const addTask = (description)=> {
