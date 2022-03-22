@@ -1,17 +1,21 @@
 // import all the necessary packages
 const express = require("express");
-const bodyParser = require("body-parser");
+var mongoose = require("mongoose");
 let todoRoutes = require("./routes/Todo");
 
 // we are using port 8000
 const port = 8000;
 
 var app = express();
-app.use(bodyParser.json());
-// app.use(express.json());
+
+//mongodb connection 
+mongoose.connect("mongodb://localhost/task_app",{ useNewUrlParser: true})
+.then(() => console.log("connection is successfull"))
+.catch((error) => console.log(error));
+
+app.use(express.json());
 app.use(todoRoutes);
-// // middleware for cors to allow cross origin resource sharing
-// app.use(cors());
+
 
 // start the server in the port 8000
 app.listen(port, () => {

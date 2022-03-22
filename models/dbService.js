@@ -1,29 +1,34 @@
-let todoList = require("./todoList.json");
+const Task = require("./task")
 
-const fetchDB = ()=> {
-  return todoList; 
+const fetchDB = async () => { 
+  return await Task.find(); 
 }
 
-const addTask = (description)=> {
-  const data = fetchDB();
-  const newTask = {
-    "id": data[data.length - 1].id + 1,
-    "description": description,
-    "completed": false
+const addTask = async (description)=> {
+  const newTask = new Task({
+    description
+  });
+  return await newTask.save();
+}
+
+const updateStatus = async (id)=> {
+  const task = await Task.findById(id);
+  if( task === null) {
+    return null;
   }
-  data.push(newTask);
+  task.completed = !task.completed;
+  const newTask = await task.save();
   return newTask;
 }
 
-const findTask = (findID)=> {
-  const data = fetchDB();
-  const index = data.findIndex(task => task.id == findID );
-  if(index == -1) return null;
-  return index;
+const deleteTaskById = async (id)=> {
+  const task = await Task.findByIdAndRemove(id);
+  return task;
 }
 
 module.exports = {
   fetchDB,
   addTask,
-  findTask
+  updateStatus,
+  deleteTaskById
 }

@@ -4,15 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha",
+    "test": "mocha --exit",
     "start": "nodemon index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.19.2",
     "express": "^4.17.3",
     "joi": "^17.6.0",
+    "mongodb": "^4.4.1",
+    "mongoose": "^6.2.7",
     "nodemon": "^2.0.15"
   },
   "devDependencies": {

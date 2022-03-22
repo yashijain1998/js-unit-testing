@@ -7,6 +7,8 @@ const server = require('../index');
 const expect = chai.expect;
 chai.use(chaiHttp);
 
+let id = null;
+
 describe('Testing rest api', () => {
 
     describe('GET /task', () => {
@@ -38,9 +40,10 @@ describe('Testing rest api', () => {
         .post('/task')
         .send(task)
         .end((err, res) => {
+          id = res.body._id;
           expect(res.status).to.equal(201);
           expect(res.body).to.be.a("object");
-          expect(res.body).to.have.property('id');
+          expect(res.body).to.have.property('_id');
           expect(res.body).to.have.property('description');
           expect(res.body).to.have.property('completed');
           expect(res.body.description).to.equal(task.description);
@@ -64,13 +67,12 @@ describe('Testing rest api', () => {
   
     describe('PUT /task/:id', () => {
       it('update a task by id', (done) => {
-        const taskId = 1;
         chai.request(server)
-        .put('/task/' + taskId)
+        .put('/task/' + id)
         .end((err, res) => {
           expect(res.status).to.equal(201);
           expect(res.body).to.be.a("object");
-          expect(res.body).to.have.property('id');
+          expect(res.body).to.have.property('_id');
           expect(res.body).to.have.property('description');
           expect(res.body).to.have.property('completed');
           expect(res.body.completed).to.be.true;
@@ -83,8 +85,7 @@ describe('Testing rest api', () => {
         chai.request(server)
         .put('/task/' + taskId)
         .end((err, res) => {
-          expect(res.status).to.equal(404);
-          expect(res.text).to.equal('Given task is not present for updation');
+          expect(res.status).to.equal(400);
         done();
         })
       })
@@ -92,12 +93,14 @@ describe('Testing rest api', () => {
   
     describe('DELETE /task/:id', () => {
       it('delete a task by id', (done) => {
-        const taskId = 1;
         chai.request(server)
-        .delete('/task/' + taskId)
+        .delete('/task/' + id)
         .end((err, res) => {
           expect(res.status).to.equal(200);
-          expect(res.text).to.equal(`id ${taskId} deleted successfully.`);
+          expect(res.body).to.be.a("object");
+          expect(res.body).to.have.property('_id');
+          expect(res.body).to.have.property('description');
+          expect(res.body).to.have.property('completed');
         done();
         })
       })
@@ -106,8 +109,7 @@ describe('Testing rest api', () => {
         chai.request(server)
         .delete('/task/' + taskId)
         .end((err, res) => {
-          expect(res.status).to.equal(404);
-          expect(res.text).to.equal('Given task is not present for deletion.');
+          expect(res.status).to.equal(400);
         done();
         })
       })
