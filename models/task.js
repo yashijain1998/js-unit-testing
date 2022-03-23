@@ -1,14 +1,31 @@
 var mongoose = require("mongoose");
 
-var taskSchema= new mongoose.Schema({
-    description: {
+const taskSchema = new mongoose.Schema({
+  description: {
+    type: String,
+    required: true
+  },
+  completed: {
+    type: Boolean,
+    default: false
+  }
+})
+
+var userSchema= new mongoose.Schema({
+    name: {
       type: String,
       required: true
     },
-    completed: {
-        type: Boolean,
-        default: false
+    password: {
+      type: String,
+      required: true
+    },
+    tasks: {
+      type: [taskSchema],
+      default: []
     }
   });
   
-module.exports = mongoose.model("Task",taskSchema);
+const User = mongoose.model("user",userSchema);
+
+module.exports = User;

@@ -1,14 +1,27 @@
-const Task = require("./task")
+const User = require("./task")
 
 const fetchDB = async () => { 
   return await Task.find(); 
 }
 
-const addTask = async (description)=> {
-  const newTask = new Task({
-    description
+const addUser = async ({name, password})=> {
+  const newUser = new User({
+    name,
+    password
   });
-  return await newTask.save();
+  return await newUser.save();
+}
+
+const addTask = async (description, userId)=> {
+  
+  const user = await User.findById(userId);
+
+  const newTask = {
+    description
+  };
+
+  user.tasks.push(newTask);
+  return await user.save();
 }
 
 const updateStatus = async (id)=> {
@@ -28,6 +41,7 @@ const deleteTaskById = async (id)=> {
 
 module.exports = {
   fetchDB,
+  addUser,
   addTask,
   updateStatus,
   deleteTaskById

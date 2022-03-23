@@ -7,10 +7,17 @@ getAllTodos = async (req, res) =>  {
     res.send(data);
 }
 
+addUser = async (req, res) => {
+    const result = req.body;
+    const newUser = await dbService.addUser(result);
+    res.status(201).send(newUser);
+}
+
 addTask = async (req,res) => {
+    const userId =  req.params.id;
     const result = taskSchema.validate(req.body);
     if(result.error) return res.status(400).send("Description is necessary for adding a new task.")
-    const newTask = await dbService.addTask(req.body.description);
+    const newTask = await dbService.addTask(req.body.description, userId);
     res.status(201).send(newTask);
 }
 
@@ -32,4 +39,4 @@ deleteTask = async (req,res) => {
     res.send(task);
 }
 
-module.exports = {getAllTodos, addTask, updateTask, deleteTask};
+module.exports = {getAllTodos, addUser, addTask, updateTask, deleteTask};
