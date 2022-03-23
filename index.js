@@ -1,7 +1,7 @@
 // import all the necessary packages
 const express = require("express");
 var mongoose = require("mongoose");
-let todoRoutes = require("./routes/Todo");
+let taskRoutes = require("./routes/router");
 
 // we are using port 8000
 const port = 8000;
@@ -14,7 +14,7 @@ mongoose.connect("mongodb://localhost/task_app",{ useNewUrlParser: true})
 .catch((error) => console.log(error));
 
 app.use(express.json());
-app.use(todoRoutes);
+app.use(taskRoutes);
 
 
 // start the server in the port 8000

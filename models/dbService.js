@@ -1,41 +1,66 @@
-const User = require("./task")
+const User = require("./userSchema")
 
-const fetchDB = async () => { 
-  return await Task.find(); 
-}
-
-const addUser = async ({name, password})=> {
+const addUser = async (user)=> {
   const newUser = new User({
-    name,
-    password
+    name : user.name,
+    password: user.password
   });
   return await newUser.save();
 }
 
+const fetchDB = async (userId) => {
+  const user =  await User.findById(userId);
+  if(user == null) return null;
+  return user.tasks;
+}
+
 const addTask = async (description, userId)=> {
-  
   const user = await User.findById(userId);
+  if(user == null) return null;
 
   const newTask = {
     description
   };
-
   user.tasks.push(newTask);
-  return await user.save();
+  const updatedUser = await user.save();
+  const addedTask = updatedUser.tasks[updatedUser.tasks.length - 1];
+  return addedTask;
 }
 
-const updateStatus = async (id)=> {
-  const task = await Task.findById(id);
-  if( task === null) {
-    return null;
+const updateStatus = async (userId,taskId)=> {
+  const user = await User.findById(userId);
+  if(user == null) { 
+    return "user";
   }
-  task.completed = !task.completed;
-  const newTask = await task.save();
-  return newTask;
+  const task = user.tasks.id(taskId);
+  if(task == null) {
+    return "task"
+  }
+  task.completed = !task.completed; 
+  const filter = {
+    "_id" : userId,
+    "tasks._id": taskId 
+  }
+  const update = { 
+    "$set": {
+        "tasks.$.completed": task.completed
+    }
+  }
+  User.findOneAndUpdate(filter,update, () =>  {})
+  return task;
 }
 
-const deleteTaskById = async (id)=> {
-  const task = await Task.findByIdAndRemove(id);
+const deleteTask = async (userId,taskId)=> {
+  const user = await User.findById(userId);
+  if(user == null) { 
+    return "user";
+  }
+  const task = user.tasks.id(taskId);
+  if(task == null) {
+    return "task"
+  }
+  task.remove();
+  await user.save();
   return task;
 }
 
@@ -44,5 +69,5 @@ module.exports = {
   addUser,
   addTask,
   updateStatus,
-  deleteTaskById
+  deleteTask
 }

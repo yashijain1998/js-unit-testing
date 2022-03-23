@@ -1,4 +1,4 @@
-var mongoose = require("mongoose");
+const mongoose = require("mongoose");
 
 const taskSchema = new mongoose.Schema({
   description: {
@@ -11,7 +11,7 @@ const taskSchema = new mongoose.Schema({
   }
 })
 
-var userSchema= new mongoose.Schema({
+const userSchema= new mongoose.Schema({
     name: {
       type: String,
       required: true
