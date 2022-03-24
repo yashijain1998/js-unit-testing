@@ -2,11 +2,11 @@ const User = require("./userSchema")
 
 const getAllTasks = async (userId) => {
   try {
-    const user =  await User.findById(userId);
-    if(user == null) {
+    const data =  await User.findById(userId, 'tasks');
+    if(data == null) {
       throw new Error('user not found');
-    };
-    return user.tasks;
+    }
+    return data.tasks
   } catch(err) {
      throw new Error(err.message)
   }
@@ -19,8 +19,8 @@ const addTask = async (userId, task)=> {
       throw new Error('user not found')
     };
     user.tasks.push(task);
-    const updatedUser = await user.save();
-    const addedTask = updatedUser.tasks[updatedUser.tasks.length - 1];
+    const { tasks } = await user.save();
+    const addedTask = tasks[tasks.length - 1];
     return addedTask;
   }catch(err){
     throw new Error(err.message)
