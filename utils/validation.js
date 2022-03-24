@@ -9,4 +9,20 @@ const userValidation = Joi.object({
     password: Joi.string().min(5).required()
 })
 
-module.exports = { taskValidation, userValidation };
+const isValidUser = (data) => {
+    const validateResult = userValidation.validate(data);
+    console.log(validateResult.error)
+    if(validateResult.error) {
+        throw new Error(validateResult.error.message);
+    }
+    return 
+}
+
+const isValidTask = (data) => {
+    const validateResult = taskValidation.validate(data);
+    if(validateResult.error) {
+        throw new Error(validateResult.error.message);
+    }
+}
+
+module.exports = { isValidTask, isValidUser };
