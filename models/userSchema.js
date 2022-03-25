@@ -3,7 +3,8 @@ const mongoose = require("mongoose");
 const taskSchema = new mongoose.Schema({
   description: {
     type: String,
-    required: true
+    required: true,
+    minlength: [1, 'Description should not be empty'],
   },
   completed: {
     type: Boolean,
@@ -14,11 +15,14 @@ const taskSchema = new mongoose.Schema({
 const userSchema= new mongoose.Schema({
     name: {
       type: String,
-      required: true
+      required: true,
+      minlength: [3, 'Name must be mimimum 3 character'],
+      unique: true
     },
     password: {
       type: String,
-      required: true
+      required: true,
+      minlength: [5, 'Paaword must be mimimum 5 character'],
     },
     tasks: {
       type: [taskSchema],
@@ -27,10 +31,5 @@ const userSchema= new mongoose.Schema({
   });
 
 const User = mongoose.model("user",userSchema);
-
-userSchema.path('name').validate(async (value) => {
-  const nameCount = await mongoose.models.user.countDocuments({name: value });
-  return !nameCount;
-}, 'Name already exists');
 
 module.exports = User;

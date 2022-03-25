@@ -10,7 +10,6 @@ addUser = async (req, res) => {
         const {_id} = await userService.addUser(userData);
         res.status(201).send({id:_id});
     } catch(err) {
-        console.log(err)
         res.status(404).send({error: err.message})
     }
 }
@@ -21,7 +20,7 @@ getUser = async(req,res) => {
         const data = await userService.getUser(userData);
         return res.send({ id: data })
     } catch(err) {
-        res.status(400).send(err.message);
+        res.status(400).send({error: err.message});
     }
 }
 
@@ -32,7 +31,7 @@ getAllTasks = async (req, res) =>  {
         const data = await taskService.getAllTasks(userId);
         res.send(data);
     } catch(err) {
-        res.status(404).send(err.message);
+        res.status(404).send({error: err.message});
     }
 }
 
@@ -45,7 +44,7 @@ addTask = async (req,res) => {
         const data = await taskService.addTask(userId, taskData);
         res.status(201).send(data);
     } catch(err) {
-        res.status(404).send(err.message);
+        res.status(404).send({error: err.message});
     }
 }
 
@@ -58,7 +57,7 @@ updateTask = async (req,res) => {
         const data =  await taskService.updateStatus(userId, taskId);
         res.status(201).send(data);
     } catch(err) {
-        res.status(404).send(err.message);
+        res.status(404).send({error: err.message});
     }
 }
 
@@ -71,7 +70,7 @@ deleteTask = async (req,res) => {
         const data = await taskService.deleteTask(userId, taskId);
         res.status(201).send(data);
     } catch(err) {
-        res.status(404).send(err.message);
+        res.status(404).send({error: err.message});
     }
 }
 

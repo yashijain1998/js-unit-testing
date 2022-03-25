@@ -8,6 +8,9 @@ const addUser = async (user)=> {
         });
         return await newUser.save();
     } catch(err) {
+        if (err.code === 11000) {
+            throw new Error('name must be unique');
+        }
         throw new Error(err.message);
     }
 }
