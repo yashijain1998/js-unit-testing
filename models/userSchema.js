@@ -25,7 +25,12 @@ const userSchema= new mongoose.Schema({
       default: []
     }
   });
-  
+
 const User = mongoose.model("user",userSchema);
+
+userSchema.path('name').validate(async (value) => {
+  const nameCount = await mongoose.models.user.countDocuments({name: value });
+  return !nameCount;
+}, 'Name already exists');
 
 module.exports = User;

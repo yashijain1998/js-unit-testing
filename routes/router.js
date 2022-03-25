@@ -1,10 +1,13 @@
 const express = require('express');
 const router = express.Router();
 
-const {getAllTasks, addUser, addTask, updateTask, deleteTask} = require('../controllers/apiController');
+const {addUser, getUser, getAllTasks, addTask, updateTask, deleteTask} = require('../controllers/apiController');
 
 //add user
-router.post('/user', addUser);
+router.post('/signup', addUser);
+
+//get user
+router.post('/signin', getUser);
 
 // get all tasks
 router.get('/user/:uid/tasks', getAllTasks);

@@ -7,10 +7,21 @@ addUser = async (req, res) => {
     try {
         const userData = req.body;
         isValidUser(userData);
-        const newUser = await userService.addUser(userData);
-        res.status(201).send(newUser);
+        const {_id} = await userService.addUser(userData);
+        res.status(201).send({id:_id});
     } catch(err) {
-        res.status(404).send(err.message)
+        console.log(err)
+        res.status(404).send({error: err.message})
+    }
+}
+
+getUser = async(req,res) => {
+    try{
+        const userData = req.body;
+        const data = await userService.getUser(userData);
+        return res.send({ id: data })
+    } catch(err) {
+        res.status(400).send(err.message);
     }
 }
 
@@ -64,4 +75,4 @@ deleteTask = async (req,res) => {
     }
 }
 
-module.exports = {getAllTasks, addUser, addTask, updateTask, deleteTask};
+module.exports = {getAllTasks, addUser, addTask, updateTask, deleteTask,getUser};

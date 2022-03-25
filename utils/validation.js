@@ -11,7 +11,6 @@ const userValidation = Joi.object({
 
 const isValidUser = (data) => {
     const validateResult = userValidation.validate(data);
-    console.log(validateResult.error)
     if(validateResult.error) {
         throw new Error(validateResult.error.message);
     }

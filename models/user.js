@@ -7,9 +7,21 @@ const addUser = async (user)=> {
             password: user.password
         });
         return await newUser.save();
-    } catch(e) {
-        throw new Error(e);
+    } catch(err) {
+        throw new Error(err.message);
     }
 }
 
-module.exports = { addUser }
+const getUser = async(userData) => {
+    try{
+        const {_id} = await User.findOne({name:userData.name},'_id');
+        if(_id == null) {
+            throw new Error('user is not present');
+        }    
+        return _id;
+    } catch(err) {
+        throw new Error(err.message);
+    }
+}
+
+module.exports = { addUser, getUser }
