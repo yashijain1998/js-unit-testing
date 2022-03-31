@@ -17,11 +17,11 @@ const addUser = async (user)=> {
 
 const getUser = async(userData) => {
     try{
-        const {_id} = await User.findOne({name:userData.name},'_id');
-        if(_id == null) {
+        const data = await User.findOne({name:userData.name},'_id');
+        if(data == null) {
             throw new Error('user is not present');
-        }    
-        return _id;
+        }
+        return data._id;
     } catch(err) {
         throw new Error(err.message);
     }
