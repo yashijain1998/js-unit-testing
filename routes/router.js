@@ -1,24 +1,26 @@
 const express = require('express');
 const router = express.Router();
 
-const {addUser, getUser, getAllTasks, addTask, updateTask, deleteTask} = require('../controllers/apiController');
+const { getAllTasks, addTask, updateTask, deleteTask } = require('../controllers/taskController');
+const { signUpUser, signInUser } = require('../controllers/userController');
+const { verifyAuthToken } = require('../utils/authTokenizaton');
 
 //add user
-router.post('/signup', addUser);
+router.post('/signup', signUpUser);
 
 //get user
-router.post('/signin', getUser);
+router.post('/signin', signInUser);
 
 // get all tasks
-router.get('/user/:uid/tasks', getAllTasks);
+router.get('/tasks', verifyAuthToken, getAllTasks);
 
 //create a new task
-router.post('/user/:uid/tasks', addTask);
+router.post('/tasks', verifyAuthToken, addTask);
 
 //update task
-router.put('/user/:uid/tasks/:tid', updateTask);
+router.put('/tasks/:tid', verifyAuthToken, updateTask);
 
 //delete task
-router.delete('/user/:uid/tasks/:tid', deleteTask);
+router.delete('/tasks/:tid', verifyAuthToken, deleteTask);
 
 module.exports = router;

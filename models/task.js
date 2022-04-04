@@ -1,23 +1,23 @@
 const User = require("./userSchema")
 
-const getAllTasks = async (userId) => {
+const getAllTasks = async (userData) => {
   try {
-    const data =  await User.findById(userId, 'tasks');
-    if(data == null) {
+    const user =  await User.findOne({ email: userData.email }, 'tasks');
+    if(user == null) {
       throw new Error('user not found');
     }
-    return data.tasks
+    return user.tasks
   } catch(err) {
      throw new Error(err.message)
   }
 }
 
-const addTask = async (userId, task)=> {
+const addTask = async (userData, task)=> {
   try {
-    const user = await User.findById(userId);
+    const user =  await User.findOne({ email: userData.email }, 'tasks');
     if(user == null) {
-      throw new Error('user not found')
-    };
+      throw new Error('user not found');
+    }
     user.tasks.push(task);
     const { tasks } = await user.save();
     const addedTask = tasks[tasks.length - 1];
@@ -28,9 +28,9 @@ const addTask = async (userId, task)=> {
 
 }
 
-const updateStatus = async (userId, taskId)=> {
+const updateStatus = async (userData, taskId)=> {
   try {
-    const user = await User.findById(userId);
+    const user = await User.findOne({ email: userData.email }, 'tasks');
     if(user == null) { 
       throw new Error('user not found');
     }
@@ -40,7 +40,7 @@ const updateStatus = async (userId, taskId)=> {
     }
     task.completed = !task.completed; 
     const filter = {
-      "_id" : userId,
+      "email" : userData.email,
       "tasks._id": taskId 
     }
     const update = { 
@@ -56,9 +56,9 @@ const updateStatus = async (userId, taskId)=> {
   
 }
 
-const deleteTask = async (userId,taskId)=> {
+const deleteTask = async (userData,taskId)=> {
   try {
-    const user = await User.findById(userId);
+    const user = await User.findOne({ email: userData.email }, 'tasks');
     if(user == null) { 
       throw new Error('user not found');
     }

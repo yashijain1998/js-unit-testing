@@ -1,15 +1,20 @@
+const bcrypt = require('bcrypt');
 const User = require("./userSchema")
 
 const addUser = async (user)=> {
     try {
+        const salt = await bcrypt.genSalt(10);
+        const hashPassword = await bcrypt.hash(user.password, salt);
         const newUser = new User({
+            email: user.email,
             name : user.name,
-            password: user.password
+            password: hashPassword
         });
-        return await newUser.save();
+        const data = await newUser.save();
+        return data.email;
     } catch(err) {
         if (err.code === 11000) {
-            throw new Error('name must be unique');
+            throw new Error('email must be unique');
         }
         throw new Error(err.message);
     }
@@ -17,11 +22,15 @@ const addUser = async (user)=> {
 
 const getUser = async(userData) => {
     try{
-        const data = await User.findOne({name:userData.name},'_id');
+        const data = await User.findOne({ email: userData.email });
         if(data == null) {
             throw new Error('user is not present');
         }
-        return data._id;
+        const validPassword = await bcrypt.compare(userData.password, data.password);
+        if (!validPassword) {
+            throw new Error("Invalid Password");
+        }
+        return data.email;
     } catch(err) {
         throw new Error(err.message);
     }
