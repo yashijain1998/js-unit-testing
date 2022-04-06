@@ -18,21 +18,27 @@ const signInValidation = Joi.object({
 const isSignUpValid = (data) => {
     const validateResult = signUpValidation.validate(data);
     if(validateResult.error) {
-        throw new Error(validateResult.error.message);
+        const err = new Error(validateResult.error.message);
+        err.code = "ERR_101";
+        throw err;
     }
 }
 
 const isSignInValid = (data) => {
     const validateResult = signInValidation.validate(data);
     if(validateResult.error) {
-        throw new Error(validateResult.error.message);
+        const err = new Error(validateResult.error.message);
+        err.code = "ERR_101";
+        throw err;
     }
 }
 
 const isTaskValid = (data) => {
     const validateResult = taskValidation.validate(data);
     if(validateResult.error) {
-        throw new Error(validateResult.error.message);
+        const err = new Error(validateResult.error.message);
+        err.code = "ERR_301";
+        throw err;
     }
 }
 

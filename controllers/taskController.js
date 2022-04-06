@@ -8,7 +8,10 @@ getAllTasks = async (req, res) =>  {
         const result = await taskService.getAllTasks(userData);
         res.send(result);
     } catch(err) {
-        res.status(404).send({error: err.message});
+        res.status(404).send({
+            error: err.message,
+            code: err.code
+        });
     }
 }
 
@@ -20,7 +23,10 @@ addTask = async (req,res) => {
         const result = await taskService.addTask(userData, taskData);
         res.status(201).send(result);
     } catch(err) {
-        res.status(404).send({error: err.message});
+        res.status(404).send({
+            error: err.message,
+            code: err.code
+        });
     }
 }
 
@@ -32,7 +38,10 @@ updateTask = async (req,res) => {
         const result =  await taskService.updateStatus(userData, taskId);
         res.status(201).send(result);
     } catch(err) {
-        res.status(404).send({error: err.message});
+        res.status(404).send({
+            error: err.message,
+            code: err.code
+        });
     }
 }
 
@@ -44,7 +53,10 @@ deleteTask = async (req,res) => {
         const result = await taskService.deleteTask(userData, taskId);
         res.status(201).send(result);
     } catch(err) {
-        res.status(404).send({error: err.message});
+        res.status(404).send({
+            error: err.message,
+            code: err.code
+        });
     }
 }
 

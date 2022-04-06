@@ -14,9 +14,12 @@ const addUser = async (user)=> {
         return data.email;
     } catch(err) {
         if (err.code === 11000) {
-            throw new Error('email must be unique');
+            const error = new Error('email already exist');
+            error.code = "ERR_102";
+            throw error;
         }
-        throw new Error(err.message);
+        err.code = "ERR_999";
+        throw err;
     }
 }
 
@@ -24,15 +27,22 @@ const getUser = async(userData) => {
     try{
         const data = await User.findOne({ email: userData.email });
         if(data == null) {
-            throw new Error('user is not present');
+            const error = new Error('user is not present');
+            error.code = "ERR_103";
+            throw error;
         }
         const validPassword = await bcrypt.compare(userData.password, data.password);
         if (!validPassword) {
-            throw new Error("Invalid Password");
+            const error = new Error('Invalid Password');
+            error.code = "ERR_103";
+            throw error;
         }
         return data.email;
     } catch(err) {
-        throw new Error(err.message);
+        if(err.code !== "ERR_103") {
+            err.code = "ERR_999";
+        }
+        throw err;
     }
 }
 

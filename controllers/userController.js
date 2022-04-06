@@ -11,7 +11,10 @@ signUpUser = async (req, res) => {
       const accessToken = generateAuthToken(user);
       res.status(201).send({accessToken});
   } catch(err) {
-      res.status(404).send({error: err.message})
+      res.status(404).send({
+        error: err.message,
+        code: err.code
+      });
   }
 }
 
@@ -24,9 +27,23 @@ signInUser = async(req,res) => {
       const accessToken = generateAuthToken(user);
       res.send({accessToken});
   } catch(err) {
-      res.status(400).send({error: err.message});
+      res.status(404).send({
+        error: err.message,
+        code: err.code
+      });
   }
 }
 
-module.exports = { signUpUser, signInUser };
+authenticateUser = async (req, res) => {
+  try{
+    const userData = req.user;
+    if(userData !== null) {
+      res.send('Valid token');
+    }
+  } catch(err) {
+    res.status(403).send(JSON.parse(err.message));
+  }
+}
+
+module.exports = { signUpUser, signInUser, authenticateUser };
 

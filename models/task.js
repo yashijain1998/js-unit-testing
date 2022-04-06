@@ -4,11 +4,16 @@ const getAllTasks = async (userData) => {
   try {
     const user =  await User.findOne({ email: userData.email }, 'tasks');
     if(user == null) {
-      throw new Error('user not found');
+      const error = new Error('user not found');
+      error.code = "ERR_103";
+      throw error;
     }
     return user.tasks
   } catch(err) {
-     throw new Error(err.message)
+    if(err.code !== "ERR_103") {
+      err.code = "ERR_999";
+    }
+    throw err;
   }
 }
 
@@ -16,14 +21,19 @@ const addTask = async (userData, task)=> {
   try {
     const user =  await User.findOne({ email: userData.email }, 'tasks');
     if(user == null) {
-      throw new Error('user not found');
+      const error = new Error('user not found');
+      error.code = "ERR_103";
+      throw error;
     }
     user.tasks.push(task);
     const { tasks } = await user.save();
     const addedTask = tasks[tasks.length - 1];
     return addedTask;
   }catch(err){
-    throw new Error(err.message)
+    if(err.code !== "ERR_103") {
+      err.code = "ERR_999";
+    }
+    throw err;
   } 
 
 }
@@ -31,12 +41,16 @@ const addTask = async (userData, task)=> {
 const updateStatus = async (userData, taskId)=> {
   try {
     const user = await User.findOne({ email: userData.email }, 'tasks');
-    if(user == null) { 
-      throw new Error('user not found');
+    if(user == null) {
+      const error = new Error('user not found');
+      error.code = "ERR_103";
+      throw error;
     }
     const task = user.tasks.id(taskId);
     if(task == null) {
-      throw new Error('task not found');
+      const error = new Error('task not found');
+      error.code = "ERR_303";
+      throw error;
     }
     task.completed = !task.completed; 
     const filter = {
@@ -51,7 +65,10 @@ const updateStatus = async (userData, taskId)=> {
     User.findOneAndUpdate(filter,update, () =>  {})
     return task;
   } catch(err) {
-    throw new Error(err.message);
+    if(err.code !== "ERR_103" && err.code !== "ERR_303") {
+      err.code = "ERR_999"
+    }
+    throw err;
   }
   
 }
@@ -60,17 +77,24 @@ const deleteTask = async (userData,taskId)=> {
   try {
     const user = await User.findOne({ email: userData.email }, 'tasks');
     if(user == null) { 
-      throw new Error('user not found');
+      const error = new Error('user not found');
+      error.code = "ERR_103";
+      throw error;
     }
     const task = user.tasks.id(taskId);
     if(task == null) {
-      throw new Error('task not found');
+      const error = new Error('task not found');
+      error.code = "ERR_303";
+      throw error;
     }
     task.remove();
     await user.save();
     return task;
   } catch(err) {
-    throw new Error(err.message);
+    if(err.code !== "ERR_103" && err.code !== "ERR_303") {
+      err.code = "ERR_999"
+    }
+    throw err;
   }
 }
 
